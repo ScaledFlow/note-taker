@@ -1,3 +1,5 @@
+// const uuidv4 = require("uuid/v4");
+
 const $noteTitle = $(".note-title");
 const $noteText = $(".note-textarea");
 const $saveNoteBtn = $(".save-note");
@@ -19,6 +21,7 @@ const getNotes = () => {
 // A function for saving a note to the db
 const saveNote = (note) => {
   console.log("saveNote");
+  console.log(note.id);
   return $.ajax({
     url: "/api/notes",
     data: note,
@@ -59,9 +62,10 @@ const handleNoteSave = function () {
   const newNote = {
     title: $noteTitle.val(),
     text: $noteText.val(),
+    id: Math.floor(Math.random() * 100000000000),
   };
-  console.log("handelNoteSave");
 
+  console.log(newNote);
   saveNote(newNote).then(() => {
     getAndRenderNotes();
     renderActiveNote();
@@ -70,13 +74,17 @@ const handleNoteSave = function () {
 
 // Delete the clicked note
 const handleNoteDelete = function (event) {
-  console.log("handleNoteDelete");
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
-
+  console.log("handleNoteSave");
   const note = $(this).parent(".list-group-item").data();
+  console.log(note);
+  console.log(note.title);
+  console.log(note.id);
+  console.log("active note id: " + activeNote.id);
 
   if (activeNote.id === note.id) {
+    console.log("active node = note.id");
     activeNote = {};
   }
 
@@ -106,29 +114,31 @@ const handleRenderSaveBtn = function () {
   console.log("handleRenderSaveBtn");
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
     $saveNoteBtn.hide();
-    console.log("hide save button");
   } else {
-    $saveNoteBtn.show();
     console.log("show save button");
+    $saveNoteBtn.show();
   }
 };
 
 // Render's the list of note titles
 const renderNoteList = (notes) => {
   console.log("renderNoteList");
+  console.log(notes);
   $noteList.empty();
 
   const noteListItems = [];
 
   // Returns jquery object for li with given text and delete button
   // unless withDeleteButton argument is provided as false
+
   const create$li = (text, withDeleteButton = true) => {
-    console.log("create$li");
+    console.log("text passed into create$li: " + text);
     const $li = $("<li class='list-group-item'>");
     const $span = $("<span>").text(text);
     $li.append($span);
 
     if (withDeleteButton) {
+      console.log("value of withDeleteButton: " + withDeleteButton);
       const $delBtn = $(
         "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
       );
@@ -141,31 +151,19 @@ const renderNoteList = (notes) => {
     noteListItems.push(create$li("No saved Notes", false));
   }
 
+  // Add ID to li String?
   notes.forEach((note) => {
     const $li = create$li(note.title).data(note);
     noteListItems.push($li);
   });
 
+  console.log(noteListItems);
+
   $noteList.append(noteListItems);
 };
 
-function create_UUID() {
-  var dt = new Date().getTime();
-  var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
-    c
-  ) {
-    var r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-  });
-  return uuid;
-}
-
-console.log(create_UUID());
-
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
-  console.log("getAndRenderNotes");
   return getNotes().then(renderNoteList);
 };
 

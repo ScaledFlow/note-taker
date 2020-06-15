@@ -20,7 +20,9 @@ module.exports = function (app) {
   // ---------------------------------------------------------------------------
 
   app.get("/api/notes", function (req, res) {
+    console.log("made it to api get");
     res.json(dbJson);
+    // console.log(res.json(dbJson));
   });
 
   // API POST Requests
@@ -35,6 +37,16 @@ module.exports = function (app) {
     // It will do this by sending out the value "true" have a table
     // req.body is available since we're using the body parsing middleware
     console.log("Made it to post");
+    if (dbJson.length > 0) {
+      console.log("table length; " + dbJson.length);
+      console.log("db title: " + dbJson.title);
+      console.log(dbJson[0].title);
+      console.log(req.body);
+      dbJson.push(req.body);
+      console.log(dbJson);
+    }
+
+    res.json(dbJson);
     // if (tableData.length < 5) {
     //   tableData.push(req.body);
     //   res.json(true);
