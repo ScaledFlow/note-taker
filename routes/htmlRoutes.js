@@ -13,16 +13,16 @@ module.exports = function (app) {
   // Below code handles when users "visit" a page.
   // In each of the below cases the user is shown an HTML page of content
   // ---------------------------------------------------------------------------
-  console.log("in app function");
+  // console.log("in app function");
 
   app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "../public/notes.html"));
-    console.log("notes page launch");
+    console.log("notes.html page launch from htmlRoutes");
   });
 
   // If no matching route is found default to home
-  app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
-    console.log("home 'index' page launched");
-  });
+  // app.get("/index", function (req, res) {
+  //   res.sendFile(path.join(__dirname, "../public/index.html"));
+  //   console.log("index.html page launched from htmlRouts");
+  // });
 };
