@@ -8,10 +8,8 @@ const outputPath = path.join(OUTPUT_DIR(), "db.json");
 // We are linking our routes to a series of "data" sources.
 // These data sources hold arrays of information on table-data, waitinglist, etc.
 // ===============================================================================
-var dbJson = [];
-dbJson = require("../db/db.json");
 
-// console.log("dbJson: " + dbJson);
+var dbJson = require("../db/db.json");
 
 // ===============================================================================
 // ROUTING
@@ -31,9 +29,7 @@ module.exports = function (app) {
   // API POST Requests
   // ---------------------------------------------------------------------------
   app.post("/api/notes", function (req, res) {
-    if (dbJson.length > 0) {
-      dbJson.push(req.body);
-    }
+    dbJson.push(req.body);
 
     // Set post response
     res.json(dbJson);
