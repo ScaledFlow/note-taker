@@ -1,3 +1,8 @@
+fs = require("fs");
+const path = require("path");
+const OUTPUT_DIR = require("../db/store");
+const outputPath = path.join(OUTPUT_DIR(), "db.json");
+
 // ===============================================================================
 // LOAD DATA
 // We are linking our routes to a series of "data" sources.
@@ -39,29 +44,19 @@ module.exports = function (app) {
     console.log("Made it to post");
     if (dbJson.length > 0) {
       console.log("table length; " + dbJson.length);
-      console.log("db title: " + dbJson.title);
+
       console.log(dbJson[0].title);
       console.log(req.body);
       dbJson.push(req.body);
       console.log(dbJson);
+      console.log(JSON.stringify(dbJson));
     }
 
     res.json(dbJson);
-    // if (tableData.length < 5) {
-    //   tableData.push(req.body);
-    //   res.json(true);
-    // } else {
-    //   waitListData.push(req.body);
-    //   res.json(false);
-    // }
+
+    fs.writeFile(outputPath, JSON.stringify(dbJson), function (err) {
+      if (err) return console.log(err);
+      console.log("Hello World > helloworld.txt");
+    });
   });
-  // // ---------------------------------------------------------------------------
-  // // I added this below code so you could clear out the table while working with the functionality.
-  // // Don"t worry about it!
-  // app.post("/api/clear", function (req, res) {
-  //   // Empty out the arrays of data
-  //   tableData.length = 0;
-  //   waitListData.length = 0;
-  //   res.json({ ok: true });
-  // });
 };

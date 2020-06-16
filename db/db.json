@@ -1,12 +1,1 @@
-[
-  {
-    "title": "Test Title1",
-    "text": "Test text1",
-    "id": 232
-  },
-  {
-    "title": "Test Title2",
-    "text": "Test text2",
-    "id": 303
-  }
-]
+[{"title":"Test Title1","text":"Test text1","id":"232"},{"title":"Test Title 2","text":"This is another test","id":"89927783145"}]
