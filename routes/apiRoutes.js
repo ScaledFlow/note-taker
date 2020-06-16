@@ -8,8 +8,8 @@ const outputPath = path.join(OUTPUT_DIR(), "db.json");
 // We are linking our routes to a series of "data" sources.
 // These data sources hold arrays of information on table-data, waitinglist, etc.
 // ===============================================================================
-
-var dbJson = require("../db/db.json");
+var dbJson = [];
+dbJson = require("../db/db.json");
 
 // console.log("dbJson: " + dbJson);
 
@@ -25,9 +25,7 @@ module.exports = function (app) {
   // ---------------------------------------------------------------------------
 
   app.get("/api/notes", function (req, res) {
-    console.log("made it to api get");
     res.json(dbJson);
-    // console.log(res.json(dbJson));
   });
 
   // API POST Requests
@@ -48,22 +46,22 @@ module.exports = function (app) {
   // API DELETE Requests
   // ---------------------------------------------------------------------------
   app.delete("/api/notes/:id", function (req, res) {
-    console.log(
-      "XXXXXXXXXXXXXXXXXXXXXMade it to deleteXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    );
     delID = req.params.id;
-    console.log("id to delete " + delID);
-    // console.log(req.params);
-    //console.log("delete reg.body " + reg.body);
+    res.json(false);
 
-    // if (dbJson.length > 0) {
-    //   dbJson.push(req.body);
-    // }
+    let filterNote = [];
 
-    res.json(dbJson);
+    for (let i = 0; i < dbJson.length; i++) {
+      if (dbJson[i].id != delID) {
+        console.log("push it " + dbJson[i].id);
+        filterNote.push(dbJson[i]);
+      }
+    }
 
-    // fs.writeFile(outputPath, JSON.stringify(dbJson), function (err) {
-    //   if (err) return console.log(err);
-    // });
+    dbJson = filterNote;
+
+    fs.writeFile(outputPath, JSON.stringify(filterNote), function (err) {
+      if (err) return console.log(err);
+    });
   });
 };

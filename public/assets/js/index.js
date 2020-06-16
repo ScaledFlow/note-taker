@@ -31,7 +31,7 @@ const saveNote = (note) => {
 
 // A function for deleting a note from the db
 const deleteNote = (id) => {
-  console.log("deleteNote");
+  console.log("deleteNote initial call with ajax");
   console.log(id);
   return $.ajax({
     url: "api/notes/" + id,
@@ -66,8 +66,9 @@ const handleNoteSave = function () {
     id: Math.floor(Math.random() * 100000000000),
   };
 
-  console.log(newNote);
+  console.log("new notes ---- " + newNote);
   saveNote(newNote).then(() => {
+    console.log("-----------saveNote");
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -77,9 +78,9 @@ const handleNoteSave = function () {
 const handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
-  console.log("handleNoteSave");
+  console.log("handleNoteDelete");
   const note = $(this).parent(".list-group-item").data();
-  console.log(note);
+  console.log("handleNoteDelete value of note :" + note);
   console.log(note.title);
   console.log(note.id);
   console.log("active note id: " + activeNote.id);
@@ -90,6 +91,8 @@ const handleNoteDelete = function (event) {
   }
 
   deleteNote(note.id).then(() => {
+    console.log("launch deleteNote from hendleNoteDelete");
+    console.log("deleteNote :" + note.id);
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -99,6 +102,7 @@ const handleNoteDelete = function (event) {
 const handleNoteView = function () {
   console.log("handleNoteView");
   activeNote = $(this).data();
+  console.log("active note: " + activeNote);
   renderActiveNote();
 };
 
@@ -112,11 +116,9 @@ const handleNewNoteView = function () {
 // If a note's title or text are empty, hide the save button
 // Or else show it
 const handleRenderSaveBtn = function () {
-  console.log("handleRenderSaveBtn");
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
     $saveNoteBtn.hide();
   } else {
-    console.log("show save button");
     $saveNoteBtn.show();
   }
 };
@@ -165,6 +167,7 @@ const renderNoteList = (notes) => {
 
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
+  console.log("**** getAndRenderNotes ****");
   return getNotes().then(renderNoteList);
 };
 
