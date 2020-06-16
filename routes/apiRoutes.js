@@ -31,11 +31,11 @@ module.exports = function (app) {
   // API POST Requests
   // ---------------------------------------------------------------------------
   app.post("/api/notes", function (req, res) {
-    console.log("Made it to post");
     if (dbJson.length > 0) {
       dbJson.push(req.body);
     }
 
+    // Set post response
     res.json(dbJson);
 
     fs.writeFile(outputPath, JSON.stringify(dbJson), function (err) {
@@ -47,17 +47,19 @@ module.exports = function (app) {
   // ---------------------------------------------------------------------------
   app.delete("/api/notes/:id", function (req, res) {
     delID = req.params.id;
+
+    //Set delete response
     res.json(false);
 
     let filterNote = [];
 
     for (let i = 0; i < dbJson.length; i++) {
       if (dbJson[i].id != delID) {
-        console.log("push it " + dbJson[i].id);
         filterNote.push(dbJson[i]);
       }
     }
 
+    // Set dbJson array to new filterNote array that removed the deleted item
     dbJson = filterNote;
 
     fs.writeFile(outputPath, JSON.stringify(filterNote), function (err) {
